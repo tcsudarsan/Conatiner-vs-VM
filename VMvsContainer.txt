@@ -1,0 +1,8 @@
+Notes obtained from https://cloudacademy.com/blog/docker-vs-virtual-machines-differences-you-should-know/
+
+VM
+	Virtual Machines are developed on a Host OS and each VM has a Guest OS. Guest OS can be different from each other and also different from Host OS. i.e. On a Mac OS (Host OS), User can create 2 VM's with guest OSes Linux and Windows on them.
+
+Container
+	Containers are more light weight and are hosted on a Single kernel OS. i.e. Conatiners are hosted on a single host OS.
+
