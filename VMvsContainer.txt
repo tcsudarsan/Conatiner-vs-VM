@@ -36,8 +36,18 @@ Work flow followed today
 	
 		Then use normal sql commands to access postgresql
  
- 		docker run -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
+ 		
 
  		Run standalone MINio container, visit this link https://docs.min.io/docs/minio-docker-quickstart-guide.html
  		+++ Be careful with syntax, makesure it has correct spaces+++
+
+ 		docker run -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001" 
+ 		this is without a data path
+
+ 		docker run -p 9000:9000 -p 9001:9001 --name Chayminio2 -v C:\Users\ChaitanyaTholeti\Docker:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
+
+ 		This command uses a data path. in "-v C:\Users\ChaitanyaTholeti\Docker:/data", :/data is where you mention Minio, where the data should be written to, in Minio container, it is in to /data. But in real the data in /data folder is saved to  "C:\Users\ChaitanyaTholeti\Docker". 
+
+
+
 
