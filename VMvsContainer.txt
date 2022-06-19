@@ -6,3 +6,38 @@ VM
 Container
 	Containers are more light weight and are hosted on a Single kernel OS. i.e. Conatiners are hosted on a single host OS.
 
+
+Docker session 19/06/2022 with Srikanth Vaka
+
+
+Basic Docker overview/architecture is explained in this article https://docs.docker.com/get-started/overview/#docker-architecture
+
+Docker is an open platform for developing, shipping, and running applications. Docker enables you to separate your applications from your infrastructure so you can deliver software quickly. With Docker, you can manage your infrastructure in the same ways you manage your applications. By taking advantage of Docker’s methodologies for shipping, testing, and deploying code quickly, you can significantly reduce the delay between writing code and running it in production.
+
+Docker is a client server tool, used to run your infrastructure with microservices and applications in containers.
+
+Docker client communicates to Docker Daemon and Daemon will maintain the conttainerasation process depending on User requirements
+
+Docker Compose - When user wants an Automation process to run, host and build their application or services, he/she can make use od Docker compose. Compose takes the parameters listed in yaml file and provides the necessary informatio to Daemon.
+
+Docker Desktop - It is a tool to manage Conatiners in Windows and MAC OS environments.
+
+Docker Engine - Docker engine consists of CLI, Docker Daemon and client in it. Where as all of them are hosted on same infra, where Docker desktop eliminates the layer of Client server connection on Docker. In Desktop, the Daemon runs on VM inside teh client.
+
+Work flow followed today
+	Installation of DockerDesktop in Windows PC
+	Docker run getting started and timescale image containers using docker run ++++, docker pull ***
+	docker ps, docker info To find the health status of Docker
+		Downloaded timescale DB image and ran it on a container locally, instead of using a pre built container using 
+		"docker run -d --name timescaledb -p 5432:5432 -e POSTGRES_PASSWORD=password timescale/timescaledb:latest-pg14"
+		run - creates a Container at port 5432 using a local image or if the image is available on Docker hub for free.
+	
+		After initialising a conatiner, we accessed the postgresql using "docker exec -it timescaledb psql -U postgres"
+	
+		Then use normal sql commands to access postgresql
+ 
+ 		docker run -p 9000:9000 -p 9001:9001 -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
+
+ 		Run standalone MINio container, visit this link https://docs.min.io/docs/minio-docker-quickstart-guide.html
+ 		+++ Be careful with syntax, makesure it has correct spaces+++
+
