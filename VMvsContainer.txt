@@ -46,7 +46,17 @@ Work flow followed today
 
  		docker run -p 9000:9000 -p 9001:9001 --name Chayminio2 -v C:\Users\ChaitanyaTholeti\Docker:/data -e "MINIO_ROOT_USER=AKIAIOSFODNN7EXAMPLE" -e "MINIO_ROOT_PASSWORD=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY" quay.io/minio/minio server /data --console-address ":9001"
 
- 		This command uses a data path. in "-v C:\Users\ChaitanyaTholeti\Docker:/data", :/data is where you mention Minio, where the data should be written to, in Minio container, it is in to /data. But in real the data in /data folder is saved to  "C:\Users\ChaitanyaTholeti\Docker". 
+ 		This command uses a data path. in "-v C:\Users\ChaitanyaTholeti\Docker:/data", :/data is where you mention Minio, where the data should be written to, in Minio container, it is in to /data. But in real the data in /data folder is saved to  "C:\Users\ChaitanyaTholeti\Docker".
+
+
+
+ 		Use these commands to copy data on to minio from a csv in a local PC. Execute these commands from the folder, where the data is stored in local PC 
+ 
+ 		docker import https://timescaledata.blob.core.windows.net/datasets/nyc_data.tar.gz
+ 		docker cp tutorial_sample_tick.csv timescaledb:/tutorial_sample_tick.csv
+ 		docker cp tutorial_sample_company.csv timescaledb:/tutorial_sample_company.csv
+
+
 
 
 
