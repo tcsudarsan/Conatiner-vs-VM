@@ -36,7 +36,7 @@ Work flow followed today
 	
 		Then use normal sql commands to access postgresql
  
- 		
+ 		+++ Use this tutorial - https://techexpert.tips/timescaledb/timescaledb-docker-installation/+++
 
  		Run standalone MINio container, visit this link https://docs.min.io/docs/minio-docker-quickstart-guide.html
  		+++ Be careful with syntax, makesure it has correct spaces+++
@@ -56,8 +56,115 @@ Work flow followed today
  		docker cp tutorial_sample_tick.csv timescaledb:/tutorial_sample_tick.csv
  		docker cp tutorial_sample_company.csv timescaledb:/tutorial_sample_company.csv
 
+21/06/2022 with Vinod
+
+Connect to Timescale DB using python script
+	How to connect to Timescale DB running in Docker
+
+
+CONNECTION = "postgres://postgres:password@localhost:5432/nyc_data"
+def main():
+    with psycopg2.connect(CONNECTION) as conn:
+        cursor = conn.cursor()
+        # use the cursor to interact with your database
+        cursor.execute("SELECT * FROM rides LIMIT 5")
+        print(cursor.fetchone())
 
 
 
 
 
+!! Currently working code !!
+import csv
+import psycopg2
+import sys
+import pandas as pd
+row = []
+conn = psycopg2.connect(user="postgres", password="password", database="nyc_data", host="localhost", port="5432")
+print("Successfully connected!")
+cursor = conn.cursor()
+query= "SELECT * FROM rides LIMIT 5"
+outputquery = "COPY ({0}) TO STDOUT WITH CSV HEADER".format(query)
+
+with open('resultsfile.csv', 'w', encoding='utf-8') as f:
+    cursor.copy_expert(outputquery, f)
+
+conn.close()
+
+
+
+
+
+
+sql = "COPY (SELECT * FROM rides LIMIT 5) TO  STDOUT WITH CSV HEADER".format(s)
+filepath = "C:/Users/ChaitanyaTholeti/Docker/data1.csv"
+WITH Open(filepath, 'w') as f_output:
+	cursor.copy_expert(sql, f_output)
+
+
+
+!! Not successful!!
+import psycopg2
+conn = psycopg2.connect(user="postgres", password="password", database="nyc_data", host="localhost", port="5432")
+print("Successfully connected!")
+cursor = conn.cursor()
+cursor.execute("SELECT *
+FROM rides
+INTO OUTFILE 'C:\data.csv'")
+
+!! Successful!!
+#print(cursor.fetchone())
+#print(cursor.fetchmany())
+#print(cursor.fetchall()) 
+#Use this(1) commented lines to connect and check the version of TimescaleDB on docker container
+#1cursor.execute("SELECT VERSION();")
+#1version = cursor.fetchone()
+#1print("Connected into - ", version)
+
+
+import csv 
+f= open('data1.csv','w',encoding='utf-8')
+writer = csv.writer(f)
+writer.writerow(row)
+f.close
+
+
+!! upload file to minio
+
+from minio import Minio
+import os
+from io import StringIO
+MINIO_CLIENT = Minio("localhost:9000", access_key="AKIAIOSFODNN7EXAMPLE", secret_key="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", secure=False)
+print("It is successfully connected to bucket")
+MINIO_CLIENT.fput_object("first", "output.csv","C:\minio\resultsfile.csv",content_type="application/csv",)
+print("It is successfully uploaded to bucket")
+
+
+//Code to import csv file to minio//
+from io import BytesIO 
+import pandas as pd
+from io import StringIO
+from minio import Minio
+minioClient = Minio("localhost:9000", access_key="AKIAIOSFODNN7EXAMPLE", secret_key="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", secure=False)
+minioClient.fput_object('first', 'my.csv','/minio/resultsfile.csv', content_type='application/csv')
+
+// code to connect timescaledb and minio directly
+
+import csv
+import psycopg2
+import sys
+import pandas as pd
+from io import BytesIO 
+from minio import Minio
+df = []
+conn = psycopg2.connect(user="postgres", password="password", database="nyc_data", host="localhost", port="5432")
+print("Successfully connected!")
+cursor = conn.cursor()
+cursor.execute("SELECT * FROM rides LIMIT 5")
+df = cursor.fetchall()
+type(df)
+print(df)
+minioClient = Minio("localhost:9000", access_key="AKIAIOSFODNN7EXAMPLE", secret_key="wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY", secure=False)
+csv_bytes = df.to_csv().encode('utf-8')
+csv_buffer = BytesIO(csv_bytes)
+minioClient.put_object('first', 'mytest1.csv', data=csv_buffer, length = len(csv_bytes), content_type='application/csv')
